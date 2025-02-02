@@ -29,11 +29,13 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://127.0.0.1:3000',
+    trace: "on-first-retry",
+    baseURL: "https://demo.playwright.dev/todomvc/#/",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     // trace: "on-first-retry",
-    trace: "on",
-    screenshot: "on",
+    // trace: "on",
+    // screenshot: "on",
   },
 
   /* Configure projects for major browsers */
