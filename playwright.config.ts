@@ -1,5 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
-
+import path from "path";
+export const STORAGE_STATE = path.join(__dirname, "playwright/.auth/user.json");
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -29,13 +30,13 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://127.0.0.1:3000',
-    trace: "on-first-retry",
-    baseURL: "https://demo.playwright.dev/todomvc/#/",
+    // baseURL: "https://demo.playwright.dev/todomvc/#/",
+    baseURL: "https://en.wikipedia.org",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     // trace: "on-first-retry",
-    // trace: "on",
-    // screenshot: "on",
+    trace: "on",
+    screenshot: "on",
   },
 
   /* Configure projects for major browsers */
@@ -44,16 +45,37 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
+    {
+      name: "setup",
+      testMatch: "**/*.setup.ts",
+      teardown: "teardown",
+    },
 
-    // {
-    //   name: "firefox",
-    //   use: { ...devices["Desktop Firefox"] },
-    // },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
+    {
+      name: "e2e tests logged in",
+      testMatch: "**/*.spec.ts",
+      dependencies: ["setup"],
+      use: {
+        storageState: STORAGE_STATE,
+      },
+    },
 
-    // {
-    //   name: "webkit",
-    //   use: { ...devices["Desktop Safari"] },
-    // },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
+    {
+      name: "teardown",
+      testMatch: "**/*.teardown.ts",
+    },
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
